@@ -1,0 +1,85 @@
+/* Mobile-first CSS for Recipe Library */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    /* text-align: center; */
+}
+
+header {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #000080;
+    font-size: 2em;
+    align-items: flex-start;
+}
+
+.filters {
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.filter-section, .sort-section {
+    margin: 10px 0;
+}
+
+.filter-btn, .sort-btn {
+    background-color: #c8f7c5;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.sort-btn {
+    background-color: #fcdada;
+}
+
+.recipe-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+}
+
+@media (min-width: 768px) {
+    .recipe-container {
+        grid-template-columns: repeat(4, 1fr); /* Two columns on larger screens */
+    }
+}
+
+.recipe-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Adjusted width for grid alignment */
+    max-width: 400px; /* Limit max width */
+    height: auto; /* Increase height dynamically */
+    margin: auto;
+}
+
+.recipe-card img {
+    width: 100%;
+    border-radius: 10px;
+    height: auto;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.placeholder {
+    min-height: 200px; /* Increased height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}

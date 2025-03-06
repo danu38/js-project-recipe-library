@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Library</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <header>
         <h1>Recipe Library</h1>
         <div class="filters">
             <div class="filter-section">
                 <h2>Filter on kitchen</h2>
-                <button class="filter-btn">All</button>
-                <button class="filter-btn">Italy</button>
-                <button class="filter-btn">USA</button>
-                <button class="filter-btn">China</button>
+                <select id="filterDropdown">
+                    <option value="All">All</option>
+                    <option value="Italy">Italy</option>
+                    <option value="USA">USA</option>
+                    <option value="China">China</option>
+                </select>
             </div>
             <div class="sort-section">
                 <h2>Sort on time</h2>
@@ -24,21 +28,12 @@
             </div>
         </div>
     </header>
-    
-    <main class="recipe-container">
-        <div class="recipe-card placeholder">
-            <p>Temporary placeholder for filters/sorting options</p>
-        </div>
-        <div class="recipe-card">
-            <img src="recipe-image.jpg" alt="Recipe Image">
-            <h3>Temporary placeholder recipe</h3>
-            <p><strong>Cuisine:</strong> American</p>
-            <p><strong>Time:</strong> 1h 30min</p>
-            <h4>Ingredients</h4>
-            <p>6 bone-in chicken breast halves, or 6 chicken thighs and wings, skin-on</p>
-            <p>1/2 teaspoon coarse salt</p>
-            <p>1/2 teaspoon Mrs. Dash seasoning</p>
-        </div>
-    </main>
+
+
+
+    <section id="container" class="recipe-container"></section>
+
+    <script src="./script.js"></script>
 </body>
+
 </html>

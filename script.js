@@ -1,4 +1,4 @@
-const recepiesList = [
+/* const recepiesList = [
     {
         name: "Chicken Alfredo",
         ingredients: ["chicken", "pasta", "alfredo sauce"],
@@ -41,89 +41,77 @@ const recepiesList = [
         // image: "https://www.cookingclassy.com/wp-content/uploads/2019/09/chicken-fajitas-11.jpg" 
     }
 ];
-
-
-
+ */
 
 const recipeCard = document.getElementById("container");
+const filterDropdown = document.getElementById("filterDropdown");
+const filterDropdownTime = document.getElementById("filterDropdownTime");
 
-const filterDropDown = document.getElementById("filterDropdown");
+let recepiesList = []; // Store API data
 
-
-const renderRecepies = () => {
-
-    const selectedCountry = filterDropDown.value; // Get selected value
-    //console.log(selectedCountry);
-    recipeCard.innerHTML = ""; // Clear existing recipes
-
-    if (selectedCountry === "All") {
-        recepiesList.forEach(recipe => {
-
-
-            recipeCard.innerHTML += `<div class="recipe-card">
-                <img src="${recipe.image}" alt="${recipe.name}">
-                <h3>${recipe.name}</h3>
-                <p>Time: ${recipe.time} minutes</p>
-                <p>Difficulty: ${recipe.difficulty}</p>
-                <p>Country: ${recipe.country}</p>
-                    </div>   `;
-
-        });
-    } else {
-        recepiesList.forEach(recipe => {
-            if (recipe.country === selectedCountry) {
-                recipeCard.innerHTML += `<div class="recipe-card">
-        <img src="${recipe.image}" alt="${recipe.name}">
-        <h3>${recipe.name}</h3>
-        <p>Time: ${recipe.time} minutes</p>
-        <p>Difficulty: ${recipe.difficulty}</p>
-        <p>Country: ${recipe.country}</p>
-            </div>   `;
-
-            }
-        });
-
+//Fetch Data from Spoonacular API
+const fetchRecipes = async () => {
+    const URL = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+    
+    try {
+        const response = await fetch(URL);
+        const data = await response.json();
+        recepiesList = data.recipes; // Store fetched recipes
+        console.log("Fetched Recipes:", recepiesList); 
+        renderRecepies(); // Render after fetching
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
     }
-}
+};
 
-filterDropdown.addEventListener("change", renderRecepies);
-renderRecepies();
-//////////////////////////////////////////////////////
-// ////////Filter by time/////////////////////////////
-//////////////////////////////////////////////////////
-const filterDropDownTime = document.getElementById("filterDropdownTime");
+// Render Recipes Based on Selected Filters
+const renderRecepies = () => {
+    const selectedCountry = filterDropdown.value;
+    const selectedTime = filterDropdownTime.value;
+    
+    recipeCard.innerHTML = ""; // Clear previous recipes
 
-const renderRecepiesTime = () => {
+    let filteredRecipes = recepiesList;
 
-    const selectedTime = filterDropDownTime.value; // Get selected value
-    console.log(selectedTime);
-    recipeCard.innerHTML = ""; // Clear existing recipes
+    // Filter by Time
+    if (selectedTime !== "All") {
+        filteredRecipes = filteredRecipes.filter(recipe => {
+            const time = recipe.readyInMinutes || 0; // Ensure time exists
+            return (selectedTime === "30" && time <= 30) ||
+                   (selectedTime === "60" && time > 30 && time <= 60) ||
+                   (selectedTime === "120" && time > 60);
+        });
+    }
 
-    recepiesList.forEach(recipe => {
-        if (
-            selectedTime === "All" || // Show all if "All" is selected
-            (selectedTime === "30" && recipe.time <= 30) ||  // 0 to 30 minutes
-            (selectedTime === "60" && recipe.time > 30 && recipe.time <= 60) || // 30 to 60 minutes
-            (selectedTime === "120" && recipe.time > 60) // More than 60 minutes
-        ) {
+    // Filter by Cuisine (Ensure cuisines exist)
+    if (selectedCountry !== "All") {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            Array.isArray(recipe.cuisines) && recipe.cuisines.includes(selectedCountry)
+        );
+    }
+
+    // Display Filtered Recipes
+    if (filteredRecipes.length > 0) {
+        filteredRecipes.forEach(recipe => {
             recipeCard.innerHTML += `
                 <div class="recipe-card">
-                    <img src="${recipe.image}" alt="${recipe.name}">
-                    <h3>${recipe.name}</h3>
-                    <p>Time: ${recipe.time} minutes</p>
-                    <p>Difficulty: ${recipe.difficulty}</p>
-                    <p>Country: ${recipe.country}</p>
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                    <h3>${recipe.title}</h3>
+                    <p>Time: ${recipe.readyInMinutes || "Unknown"} minutes</p>
+                    <p>Cuisines: ${recipe.cuisines ? recipe.cuisines.join(", ") : "Unknown"}</p>
                 </div>
             `;
-        }else{
-            recipeCard.innerHTML = `<div class="recipe-card">
-            
-            <h3>No any receipies found matching with your filter</h3>
-            
-                </div>   `;
-        }
-    });
-}
+        });
+    } else {
+        recipeCard.innerHTML = `<div class="recipe-card">
+            <h3>No recipes found matching your filters.</h3>
+        </div>`;
+    }
+};
 
-filterDropDownTime.addEventListener("change", renderRecepiesTime);
-renderRecepiesTime();
+// Fetch API Data and Set Up Filters
+fetchRecipes().then(() => {
+    filterDropdown.addEventListener("change", renderRecepies);
+    filterDropdownTime.addEventListener("change", renderRecepies);
+});
+

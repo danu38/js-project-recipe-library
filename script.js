@@ -99,6 +99,7 @@ const renderRecepies = () => {
                     <h3>${recipe.title}</h3>
                     <p>Time: ${recipe.readyInMinutes || "Unknown"} minutes</p>
                     <p>Cuisines: ${recipe.cuisines ? recipe.cuisines.join(", ") : "Unknown"}</p>
+                    <p>Diets: ${recipe.diets ? recipe.diets.join(", ") : "Unknown"}</p>
                 </div>
             `;
         });
@@ -115,3 +116,19 @@ fetchRecipes().then(() => {
     filterDropdownTime.addEventListener("change", renderRecepies);
 });
 
+const sortAscButton = document.getElementById("sort-asc");
+const sortDescButton = document.getElementById("sort-desc");
+
+const sortReceipecs = (order) => {
+    recepiesList.sort((a, b) => {
+        if (order === "asc") {
+            return a.veryPopular - b.veryPopular;
+        } else {
+            return b.veryPopular - a.veryPopular;
+        }
+    });
+    renderRecepies();
+}
+
+sortAscButton.addEventListener("click", () => sortReceipecs("asc"));
+sortDescButton.addEventListener("click", () => sortReceipecs("desc"));

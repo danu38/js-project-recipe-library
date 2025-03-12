@@ -51,20 +51,24 @@ let recepiesList = []; // Store API data
 
 //Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
-    const URL = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+    const URL2 = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+
+    const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=YOUR_API_KEY`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+
     
     try {
         const response = await fetch(URL);
         const data = await response.json();
         recepiesList = data.recipes; // Store fetched recipes
         console.log("Fetched Recipes:", recepiesList); 
+        recepiesList = data.results; // Use 'results' from complexSearch API
         renderRecepies(); // Render after fetching
     } catch (error) {
         console.error("Error fetching recipes:", error);
     }
 };
 
-// Render Recipes Based on Selected Filters
 const renderRecepies = () => {
     const selectedCountry = filterDropdown.value;
     const selectedTime = filterDropdownTime.value;
@@ -132,3 +136,78 @@ const sortReceipecs = (order) => {
 
 sortAscButton.addEventListener("click", () => sortReceipecs("asc"));
 sortDescButton.addEventListener("click", () => sortReceipecs("desc"));
+
+
+
+
+
+
+
+/* const fetchRecipes = async () => {
+ 
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+
+    try {
+        const response = await fetch(URL);
+        const data = await response.json();
+
+        console.log("API Response:", data); // Debugging
+        if (!data.results || data.results.length === 0) {
+            console.error("No recipes found!");
+            return; // Stop execution if no recipes are found
+        }
+
+        recepiesList = data.results; // Use 'results' from complexSearch API
+        renderRecepies(); // Render after fetching
+    } catch (error) {
+        console.error("Error fetching recipes:", error);
+    }
+};
+
+const renderRecepies = () => {
+    if (!recepiesList || recepiesList.length === 0) {
+        console.error("No data available to render.");
+        return;
+    }
+
+    const selectedCountry = filterDropdown.value;
+    const selectedTime = filterDropdownTime.value;
+    
+    recipeCard.innerHTML = ""; // Clear previous recipes
+
+    let filteredRecipes = [...recepiesList]; // Clone the array safely
+
+    // Filter by Time
+    if (selectedTime !== "All") {
+        filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes && (
+            (selectedTime === "30" && recipe.readyInMinutes <= 30) ||
+            (selectedTime === "60" && recipe.readyInMinutes > 30 && recipe.readyInMinutes <= 60) ||
+            (selectedTime === "120" && recipe.readyInMinutes > 60)
+        ));
+    }
+
+    // Filter by Cuisine (Check if `cuisines` exists)
+    if (selectedCountry !== "All") {
+        filteredRecipes = filteredRecipes.filter(recipe => 
+            recipe.cuisines && recipe.cuisines.includes(selectedCountry) // Check if cuisines exist
+        );
+    }
+
+    // Render recipes
+    if (filteredRecipes.length > 0) {
+        filteredRecipes.forEach(recipe => {
+            recipeCard.innerHTML += `
+                <div class="recipe-card">
+                    <img src="${recipe.image}" alt="${recipe.title}">
+                    <h3>${recipe.title}</h3>
+                    <p>Time: ${recipe.readyInMinutes || 'N/A'} minutes</p>
+                    <p>Cuisines: ${recipe.cuisines ? recipe.cuisines.join(", ") : "Unknown"}</p>
+                </div>
+            `;
+        });
+    } else {
+        recipeCard.innerHTML = `<div class="recipe-card"><h3>No recipes found matching your filters.</h3></div>`;
+    }
+}; */
+
+// Render Recipes Based on Selected Filters

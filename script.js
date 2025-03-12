@@ -54,15 +54,24 @@ const fetchRecipes = async () => {
     const URL2 = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=YOUR_API_KEY`;
-    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=09ec631e6f78437b8866d73dffc26edb`;
 
-    
+
     try {
         const response = await fetch(URL);
         const data = await response.json();
+
+        /* console.log("API Response:", data); // Debugging
+        if (!data.results || data.results.length === 0) {
+            console.error("No recipes found!");
+            return; // Stop execution if no recipes are found
+        } */
+
+
         recepiesList = data.recipes; // Store fetched recipes
-        console.log("Fetched Recipes:", recepiesList); 
+
         recepiesList = data.results; // Use 'results' from complexSearch API
+        console.log("Fetched Recipes:", recepiesList);
         renderRecepies(); // Render after fetching
     } catch (error) {
         console.error("Error fetching recipes:", error);
@@ -72,24 +81,25 @@ const fetchRecipes = async () => {
 const renderRecepies = () => {
     const selectedCountry = filterDropdown.value;
     const selectedTime = filterDropdownTime.value;
-    
+
     recipeCard.innerHTML = ""; // Clear previous recipes
 
-    let filteredRecipes = recepiesList;
+    // let filteredRecipes = recepiesList;
+    let filteredRecipes = [...recepiesList]; // Clone the array safely
 
     // Filter by Time
     if (selectedTime !== "All") {
         filteredRecipes = filteredRecipes.filter(recipe => {
             const time = recipe.readyInMinutes || 0; // Ensure time exists
             return (selectedTime === "30" && time <= 30) ||
-                   (selectedTime === "60" && time > 30 && time <= 60) ||
-                   (selectedTime === "120" && time > 60);
+                (selectedTime === "60" && time > 30 && time <= 60) ||
+                (selectedTime === "120" && time > 60);
         });
     }
 
     // Filter by Cuisine (Ensure cuisines exist)
     if (selectedCountry !== "All") {
-        filteredRecipes = filteredRecipes.filter(recipe => 
+        filteredRecipes = filteredRecipes.filter(recipe =>
             Array.isArray(recipe.cuisines) && recipe.cuisines.includes(selectedCountry)
         );
     }
@@ -104,6 +114,7 @@ const renderRecepies = () => {
                     <p>Time: ${recipe.readyInMinutes || "Unknown"} minutes</p>
                     <p>Cuisines: ${recipe.cuisines ? recipe.cuisines.join(", ") : "Unknown"}</p>
                     <p>Diets: ${recipe.diets ? recipe.diets.join(", ") : "Unknown"}</p>
+                    <p>Very Popular: ${recipe.veryPopular}</p>
                 </div>
             `;
         });
@@ -122,21 +133,26 @@ fetchRecipes().then(() => {
 
 const sortAscButton = document.getElementById("sort-asc");
 const sortDescButton = document.getElementById("sort-desc");
+const sortTimeButton = document.getElementById("sort-time");
 
 const sortReceipecs = (order) => {
-    recepiesList.sort((a, b) => {
-        if (order === "asc") {
-            return a.veryPopular - b.veryPopular;
-        } else {
-            return b.veryPopular - a.veryPopular;
-        }
-    });
+    if (order === "time") {
+        recepiesList.sort((a, b) => a.readyInMinutes - b.readyInMinutes);
+    } else {
+        recepiesList.sort((a, b) => {
+            if (order === "asc") {
+                return a.veryPopular - b.veryPopular;
+            } else {
+                return b.veryPopular - a.veryPopular;
+            }
+        });
+    }
     renderRecepies();
-}
+};
 
 sortAscButton.addEventListener("click", () => sortReceipecs("asc"));
 sortDescButton.addEventListener("click", () => sortReceipecs("desc"));
-
+sortTimeButton.addEventListener("click", () => sortReceipecs("time"));
 
 
 
@@ -144,7 +160,7 @@ sortDescButton.addEventListener("click", () => sortReceipecs("desc"));
 
 
 /* const fetchRecipes = async () => {
- 
+
     const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     try {
@@ -172,7 +188,7 @@ const renderRecepies = () => {
 
     const selectedCountry = filterDropdown.value;
     const selectedTime = filterDropdownTime.value;
-    
+
     recipeCard.innerHTML = ""; // Clear previous recipes
 
     let filteredRecipes = [...recepiesList]; // Clone the array safely
@@ -188,7 +204,7 @@ const renderRecepies = () => {
 
     // Filter by Cuisine (Check if `cuisines` exists)
     if (selectedCountry !== "All") {
-        filteredRecipes = filteredRecipes.filter(recipe => 
+        filteredRecipes = filteredRecipes.filter(recipe =>
             recipe.cuisines && recipe.cuisines.includes(selectedCountry) // Check if cuisines exist
         );
     }

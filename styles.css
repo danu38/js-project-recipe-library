@@ -4,7 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f8f8f8;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     /* text-align: center; */
 }
 
@@ -18,21 +18,24 @@ header {
 h1 {
     color: #000080;
     font-size: 2em;
-    
+    align-items: flex-start;
 }
 
 .filters {
-    display:flex;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    /* align-items: flex-start; */
     margin-top: 10px;
 }
 
-.filter-section, .sort-section {
+.filter-section,
+.sort-section {
     margin: 10px 0;
+   
 }
 
-.filter-btn, .sort-btn {
+.filter-btn,
+.sort-btn {
     background-color: #c8f7c5;
     border: none;
     padding: 8px 16px;
@@ -45,27 +48,38 @@ h1 {
     background-color: #fcdada;
 }
 
- .recipe-container {
+.recipe-container {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
     padding: 20px;
     justify-content: center;
-} 
+    box-sizing: border-box;
+    /* Ensure padding is included in the width */
+    max-width: 100%;
+    /* Prevent horizontal scrolling */
+    margin: 0 auto;
+    /* Center the container */
+}
 
 @media (min-width: 768px) {
     .recipe-container {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on larger screens */
+        grid-template-columns: repeat(2, 1fr);
+        /* Two columns on larger screens */
     }
 }
+
 @media (min-width: 1024px) {
     .recipe-container {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for small desktops */
+        grid-template-columns: repeat(3, 1fr);
+        /* 3 columns for small desktops */
     }
 }
+
 @media (min-width: 1400px) {
     .recipe-container {
-        grid-template-columns: repeat(4, 1fr); /* 4 columns for large screens */
+        grid-template-columns: repeat(4, 1fr);
+        /* 4 columns for large screens */
     }
 }
 
@@ -74,10 +88,15 @@ h1 {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Adjusted width for grid alignment */
-    max-width: none; /* Limit max width */
-    height: auto; /* Increase height dynamically */
+    width: 100%;
+    /* Adjusted width for grid alignment */
+    max-width: 100%;
+    /* Ensure it doesn't exceed the container width */
+    height: auto;
+    /* Increase height dynamically */
     margin: 0;
+    box-sizing: border-box;
+    /* Ensure padding is included in the width */
 }
 
 .recipe-card img {
@@ -89,7 +108,8 @@ h1 {
 }
 
 .placeholder {
-    min-height: 200px; /* Increased height */
+    min-height: 200px;
+    /* Increased height */
     display: flex;
     justify-content: center;
     align-items: center;

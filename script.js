@@ -54,18 +54,18 @@ const fetchRecipes = async () => {
     const URL2 = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=YOUR_API_KEY`;
-    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American,Mexican,&addRecipeInformation=true&apiKey=09ec631e6f78437b8866d73dffc26edb`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=09ec631e6f78437b8866d73dffc26edb`;
 
 
     try {
         const response = await fetch(URL);
         const data = await response.json();
 
-        /* console.log("API Response:", data); // Debugging
+        console.log("API Response:", data); // Debugging
         if (!data.results || data.results.length === 0) {
             console.error("No recipes found!");
             return; // Stop execution if no recipes are found
-        } */
+        }
 
 
         recepiesList = data.recipes; // Store fetched recipes
@@ -81,11 +81,21 @@ const fetchRecipes = async () => {
 const renderRecepies = () => {
     const selectedCountry = filterDropdown.value;
     const selectedTime = filterDropdownTime.value;
+    const placeholder = document.getElementById("placeholder");
 
     recipeCard.innerHTML = ""; // Clear previous recipes
 
     // let filteredRecipes = recepiesList;
     let filteredRecipes = [...recepiesList]; // Clone the array safely
+
+
+let placeholdertext ="None";
+if(selectedCountry !== "All" || selectedTime !== "All"){
+placeholdertext =`Cursine selected:${selectedCountry} and Time selected:${selectedTime}`;
+}
+placeholder.innerHTML = placeholdertext;
+
+
 
     // Filter by Time
     if (selectedTime !== "All") {
@@ -126,10 +136,10 @@ const renderRecepies = () => {
 };
 
 // Fetch API Data and Set Up Filters
-fetchRecipes().then(() => {
-    filterDropdown.addEventListener("change", renderRecepies);
-    filterDropdownTime.addEventListener("change", renderRecepies);
-});
+// fetchRecipes().then(() => {
+//     filterDropdown.addEventListener("change", renderRecepies);
+//     filterDropdownTime.addEventListener("change", renderRecepies);
+// });
 
 const sortAscButton = document.getElementById("sort-asc");
 const sortDescButton = document.getElementById("sort-desc");

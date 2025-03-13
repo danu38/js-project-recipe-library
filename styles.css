@@ -20,14 +20,42 @@ h1 {
     font-size: 2em;
     align-items: flex-start;
 }
+.search-section {
+    display: flex;
+    align-items: center;
+    background: linear-gradient(to right, #f3c6e4, #c3c9f2);
+    padding: 8px;
+    border-radius: 25px;
+    width: 80%; /* Adjust for mobile */
+    max-width: 300px; /* Prevent it from getting too big */
+    margin: auto;
+}
+
+#searchInput {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+}
+
+#searchButton {
+    border: none;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 5px;
+}
 
 .filters {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     /* Change to row to align items horizontally */
     align-items: center;
     /* Center items vertically */
-    justify-content:center;
+    justify-content:center;;
     /* Add space between items */
     margin-top: 10px;
     gap: 10px;
@@ -35,7 +63,8 @@ h1 {
 }
 
 .filter-section,
-.sort-section {
+.sort-section,
+.placeholder-section {
     margin: 10px 0;
 
 }
@@ -73,6 +102,18 @@ h1 {
         grid-template-columns: repeat(2, 1fr);
         /* Two columns on larger screens */
     }
+    .filters {
+        display: flex;
+        flex-direction: row;
+        /* Change to row to align items horizontally */
+        align-items: center;
+        /* Center items vertically */
+        justify-content:center;;
+        /* Add space between items */
+        margin-top: 10px;
+        gap: 10px;
+        /* Add gap between filter elements */
+    }
 }
 
 @media (min-width: 1024px) {
@@ -80,12 +121,36 @@ h1 {
         grid-template-columns: repeat(3, 1fr);
         /* 3 columns for small desktops */
     }
+    .filters {
+        display: flex;
+        flex-direction: row;
+        /* Change to row to align items horizontally */
+        align-items: center;
+        /* Center items vertically */
+        justify-content:center;;
+        /* Add space between items */
+        margin-top: 10px;
+        gap: 10px;
+        /* Add gap between filter elements */
+    }
 }
 
 @media (min-width: 1400px) {
     .recipe-container {
         grid-template-columns: repeat(4, 1fr);
         /* 4 columns for large screens */
+    }
+    .filters {
+        display: flex;
+        flex-direction: row;
+        /* Change to row to align items horizontally */
+        align-items: center;
+        /* Center items vertically */
+        justify-content:center;;
+        /* Add space between items */
+        margin-top: 10px;
+        gap: 10px;
+        /* Add gap between filter elements */
     }
 }
 

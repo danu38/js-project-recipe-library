@@ -11,10 +11,16 @@
 <body>
     <header>
         <h1>Recipe Library</h1>
+        <div class="search-section">
+            <span class="search-icon"></span>
+            <input type="text" id="searchInput" placeholder="Search for a recipe..." />
+            <button id="searchBtn">🔍</button>
+        </div>
         <div class="filters">
             <div class="filter-section">
+
                 <h2>Filter on kitchen</h2>
-                
+
                 <select id="filterDropdown">
                     <option value="All">All Cuisines</option>
                     <option value="Italian">Italian</option>
@@ -23,7 +29,7 @@
                     <option value="Mexican">Mexican</option>
                     <option value="Indian">Indian</option>
                 </select>
-                
+
                 <select id="filterDropdownTime">
                     <option value="All">All TIme durations </option>
                     <option value="30">0 to 30 minutes</option>
@@ -36,6 +42,9 @@
                 <button class="sort-btn" id="sort-desc">Descending on Popularity</button>
                 <button class="sort-btn" id="sort-asc">Ascending on Popularity</button>
                 <button class="sort-btn" id="sort-time">Sort by time</button>
+            </div>
+            <div class="placeholder-section" id="placeholder">You have selected
+                <h4> <span id="selectedFilters">None</span></h4>
             </div>
         </div>
     </header>

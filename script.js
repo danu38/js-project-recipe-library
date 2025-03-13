@@ -4,16 +4,21 @@ const filterDropdownTime = document.getElementById("filterDropdownTime");
 
 let recepiesList = []; // Store API data
 
-//Fetch Data from Spoonacular API
+// Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
     const URL2 = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
-    const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=YOUR_API_KEY`;
-    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=09ec631e6f78437b8866d73dffc26edb`;
-
+    const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=09ec631e6f78437b8866d73dffc26edb`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     try {
         const response = await fetch(URL);
+        if (!response.ok) {
+            console.error(`Error: ${response.status} - ${response.statusText}`);
+            alert("API quota exceeded or an error occurred. Please try again later.");
+            return; // Stop execution
+        }
+
         const data = await response.json();
 
         console.log("API Response:", data); // Debugging
@@ -21,9 +26,6 @@ const fetchRecipes = async () => {
             console.error("No recipes found!");
             return; // Stop execution if no recipes are found
         }
-
-
-        recepiesList = data.recipes; // Store fetched recipes
 
         recepiesList = data.results; // Use 'results' from complexSearch API
         console.log("Fetched Recipes:", recepiesList);
@@ -36,17 +38,10 @@ const fetchRecipes = async () => {
 const renderRecepies = (recipes = recepiesList) => {
     const selectedCountry = filterDropdown.value;
     const selectedTime = filterDropdownTime.value;
-    const placeholder = document.getElementById("placeholder");
 
     recipeCard.innerHTML = ""; // Clear previous recipes
 
     let filteredRecipes = [...recipes]; // Clone the array safely
-
-    let placeholdertext = "None";
-    if (selectedCountry !== "All" || selectedTime !== "All") {
-        placeholdertext = `Cuisine selected: ${selectedCountry} and Time selected: ${selectedTime}`;
-    }
-    placeholder.innerHTML = placeholdertext;
 
     // Filter by Time
     if (selectedTime !== "All") {
@@ -86,10 +81,10 @@ const renderRecepies = (recipes = recepiesList) => {
     }
 };
 
-//Fetch API Data and Set Up Filters
+// Fetch API Data and Set Up Filters
 fetchRecipes().then(() => {
-    filterDropdown.addEventListener("change", renderRecepies);
-    filterDropdownTime.addEventListener("change", renderRecepies);
+    filterDropdown.addEventListener("change", () => renderRecepies());
+    filterDropdownTime.addEventListener("change", () => renderRecepies());
 });
 
 const sortAscButton = document.getElementById("sort-asc");
@@ -129,3 +124,51 @@ const searchRecepies = () => {
 searchInput.addEventListener("input", searchRecepies);
 
 // Render Recipes Based on Selected Filters
+
+const randomButton = document.getElementById("random-btn");
+const randomReceipie = () => {
+    const randomRecipe = Math.floor(Math.random() * recepiesList.length);
+    console.log("Random Recipe:", recepiesList[randomRecipe]);
+    renderRecepies([recepiesList[randomRecipe]]);
+};
+randomButton.addEventListener("click", randomReceipie);
+
+function updatePlaceholder() {
+    let selectedCountry = document.getElementById("filterDropdown").value;
+    let selectedTime = document.getElementById("filterDropdownTime").value;
+    let placeholder = document.getElementById("placeholder");
+
+    let placeholderText = "None";
+
+    if (selectedCountry !== "All Cuisines" || selectedTime !== "All Time durations") {
+        placeholderText = `Cuisine : ${selectedCountry} , Time : ${selectedTime}`;
+    }
+
+    placeholder.innerHTML = placeholderText;
+}
+
+document.getElementById("filterDropdown").addEventListener("change", updatePlaceholder);
+document.getElementById("filterDropdownTime").addEventListener("change", updatePlaceholder);
+
+updatePlaceholder();
+
+
+document.getElementById("clearFilters").addEventListener("click", () => {
+    // Reset dropdowns
+    document.getElementById("filterDropdown").value = "All";
+    document.getElementById("filterDropdownTime").value = "All";
+
+    // Trigger change event to update the displayed text
+    document.getElementById("filterDropdown").dispatchEvent(new Event("change"));
+    document.getElementById("filterDropdownTime").dispatchEvent(new Event("change"));
+
+    // Clear placeholder
+    document.getElementById("placeholder").innerHTML = "None";
+
+    // Reset sorting (you might need to update the button styles too)
+    document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
+
+    // Reload all recipes (assuming fetchReceipes fetches all recipes)
+    fetchRecipes();
+});
+

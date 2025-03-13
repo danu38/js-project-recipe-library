@@ -20,14 +20,17 @@ h1 {
     font-size: 2em;
     align-items: flex-start;
 }
+
 .search-section {
     display: flex;
     align-items: center;
     background: linear-gradient(to right, #f3c6e4, #c3c9f2);
     padding: 8px;
     border-radius: 25px;
-    width: 80%; /* Adjust for mobile */
-    max-width: 300px; /* Prevent it from getting too big */
+    width: 80%;
+    /* Adjust for mobile */
+    max-width: 300px;
+    /* Prevent it from getting too big */
     margin: auto;
 }
 
@@ -55,7 +58,8 @@ h1 {
     /* Change to row to align items horizontally */
     align-items: center;
     /* Center items vertically */
-    justify-content:center;;
+    justify-content: center;
+    ;
     /* Add space between items */
     margin-top: 10px;
     gap: 10px;
@@ -64,13 +68,17 @@ h1 {
 
 .filter-section,
 .sort-section,
-.placeholder-section {
+.placeholder-section,
+.random-section,
+.clear-section {
     margin: 10px 0;
 
 }
 
 .filter-btn,
-.sort-btn {
+.sort-btn,
+.random-btn,
+.clear-btn {
     background-color: #c8f7c5;
     border: none;
     padding: 8px 16px;
@@ -79,8 +87,37 @@ h1 {
     cursor: pointer;
 }
 
+select {
+    background-color: #c8f7c5;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    /* Match the font size of the buttons */
+    color: #000;
+    /* Ensure text is visible */
+}
+
+select:focus {
+    outline: none;
+    /* Remove default focus outline */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    /* Add a subtle shadow for focus */
+}
+
+.clear-btn:hover {
+    background-color: #d9534f;
+}
+
 .sort-btn {
     background-color: #fcdada;
+}
+
+.sort-btn.active {
+    background-color: #f08080;
+    /* Adjust based on your theme */
 }
 
 .recipe-container {
@@ -102,13 +139,15 @@ h1 {
         grid-template-columns: repeat(2, 1fr);
         /* Two columns on larger screens */
     }
+
     .filters {
         display: flex;
         flex-direction: row;
         /* Change to row to align items horizontally */
         align-items: center;
         /* Center items vertically */
-        justify-content:center;;
+        justify-content: center;
+        ;
         /* Add space between items */
         margin-top: 10px;
         gap: 10px;
@@ -121,13 +160,15 @@ h1 {
         grid-template-columns: repeat(3, 1fr);
         /* 3 columns for small desktops */
     }
+
     .filters {
         display: flex;
         flex-direction: row;
         /* Change to row to align items horizontally */
         align-items: center;
         /* Center items vertically */
-        justify-content:center;;
+        justify-content: center;
+        ;
         /* Add space between items */
         margin-top: 10px;
         gap: 10px;
@@ -140,13 +181,15 @@ h1 {
         grid-template-columns: repeat(4, 1fr);
         /* 4 columns for large screens */
     }
+
     .filters {
         display: flex;
         flex-direction: row;
         /* Change to row to align items horizontally */
         align-items: center;
         /* Center items vertically */
-        justify-content:center;;
+        justify-content: center;
+        ;
         /* Add space between items */
         margin-top: 10px;
         gap: 10px;

@@ -6,9 +6,7 @@ let recepiesList = []; // Store API data
 
 // Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
-    const URL2 = `https://api.spoonacular.com/recipes/random?number=10&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
-    const URL1 = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&apiKey=09ec631e6f78437b8866d73dffc26edb`;
     const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     try {
@@ -92,8 +90,10 @@ const sortDescButton = document.getElementById("sort-desc");
 const sortTimeButton = document.getElementById("sort-time");
 
 const sortReceipecs = (order) => {
+    document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
     if (order === "time") {
         recepiesList.sort((a, b) => a.readyInMinutes - b.readyInMinutes);
+        sortTimeButton.classList.add("active");
     } else {
         recepiesList.sort((a, b) => {
             if (order === "asc") {
@@ -102,8 +102,14 @@ const sortReceipecs = (order) => {
                 return b.veryPopular - a.veryPopular;
             }
         });
+        if (order === "asc") {
+            sortAscButton.classList.add("active");
+        } else {
+            sortDescButton.classList.add("active");
+        }
     }
     renderRecepies();
+    updatePlaceholder(); // Update placeholder after sorting
 };
 
 sortAscButton.addEventListener("click", () => sortReceipecs("asc"));
@@ -138,10 +144,19 @@ function updatePlaceholder() {
     let selectedTime = document.getElementById("filterDropdownTime").value;
     let placeholder = document.getElementById("placeholder");
 
+    let sortOrder = "";
+    if (document.getElementById("sort-asc").classList.contains("active")) {
+        sortOrder = "Ascending on Popularity";
+    } else if (document.getElementById("sort-desc").classList.contains("active")) {
+        sortOrder = "Descending on Popularity";
+    } else if (document.getElementById("sort-time").classList.contains("active")) {
+        sortOrder = "Sort by Time";
+    }
+
     let placeholderText = "None";
 
-    if (selectedCountry !== "All Cuisines" || selectedTime !== "All Time durations") {
-        placeholderText = `Cuisine : ${selectedCountry} , Time : ${selectedTime}`;
+    if (selectedCountry !== "All" || selectedTime !== "All" || sortOrder) {
+        placeholderText = `Cuisine: ${selectedCountry}, Time: ${selectedTime}, Sort: ${sortOrder}`;
     }
 
     placeholder.innerHTML = placeholderText;
@@ -149,9 +164,6 @@ function updatePlaceholder() {
 
 document.getElementById("filterDropdown").addEventListener("change", updatePlaceholder);
 document.getElementById("filterDropdownTime").addEventListener("change", updatePlaceholder);
-
-updatePlaceholder();
-
 
 document.getElementById("clearFilters").addEventListener("click", () => {
     // Reset dropdowns
@@ -171,4 +183,6 @@ document.getElementById("clearFilters").addEventListener("click", () => {
     // Reload all recipes (assuming fetchReceipes fetches all recipes)
     fetchRecipes();
 });
+
+updatePlaceholder();
 

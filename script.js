@@ -11,7 +11,7 @@ const cacheExpirationTIme = 1000 * 60 * 60; // 1 hour
 // Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
     // Show loading indicator
-    loadingElement.classList.remove("hidden"); 
+    loadingElement.classList.remove("hidden"); await new Promise(resolve => setTimeout(resolve, 3000));
     const cachedData = localStorage.getItem(cachedKey);
     if (cachedData) {
         const { data, timestamp } = JSON.parse(cachedData);
@@ -28,10 +28,11 @@ const fetchRecipes = async () => {
         }
     }
 
-    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=50&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=20&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     try {
         loadingElement.classList.remove("hidden"); 
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Simulate loading time
         const response = await fetch(URL);
         if (!response.ok) {
             console.error(`Error: ${response.status} - ${response.statusText}`);

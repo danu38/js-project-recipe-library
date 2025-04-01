@@ -152,6 +152,20 @@ select:focus {
 .hidden {
     display: none;
 }
+.spinner {
+    border: 5px solid rgba(0, 0, 0, 0.1);
+    border-top: 5px solid #ff4500;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 @media (min-width: 768px) {
     .recipe-container {
         grid-template-columns: repeat(2, 1fr);

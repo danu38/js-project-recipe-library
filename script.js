@@ -4,8 +4,26 @@ const filterDropdownTime = document.getElementById("filterDropdownTime");
 
 let recepiesList = []; // Store API data
 
+
+const cachedKey = "cachedRecipes";
+const cacheExpirationTIme = 1000 * 60 * 60; // 1 hour
 // Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
+
+    const cachedData = localStorage.getItem(cachedKey);
+    if (cachedData) {
+        const { data, timestamp } = JSON.parse(cachedData);
+
+        // Check if cache is still valid
+        if (Date.now() - timestamp < cacheExpirationTIme) {
+            console.log("Using Cached Data:", data);
+            recepiesList = data;
+            renderRecepies();
+            return;
+        } else {
+            console.log("Cache Expired. Fetching New Data...");
+        }
+    }
 
     const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
@@ -26,6 +44,7 @@ const fetchRecipes = async () => {
         }
 
         recepiesList = data.results; // Use 'results' from complexSearch API
+        localStorage.setItem(cachedKey, JSON.stringify({ data: recepiesList, timestamp: Date.now() }));
         console.log("Fetched Recipes:", recepiesList);
         renderRecepies(); // Render after fetching
     } catch (error) {

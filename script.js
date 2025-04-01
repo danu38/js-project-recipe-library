@@ -87,7 +87,7 @@ const renderRecepies = (recipes = recepiesList) => {
                     <p>Time: ${recipe.readyInMinutes || "Unknown"} minutes</p>
                     <p>Cuisines: ${recipe.cuisines ? recipe.cuisines.join(", ") : "Unknown"}</p>
                     <p>Diets: ${recipe.diets ? recipe.diets.join(", ") : "Unknown"}</p>
-                    <p>Very Popular: ${recipe.veryPopular}</p>
+                    <p>Popularity: <strong>❤️ ${recipe.aggregateLikes || 0}</strong></p>
                 </div>
             `;
         });
@@ -113,26 +113,22 @@ const sortReceipecs = (order) => {
     if (order === "time") {
         recepiesList.sort((a, b) => a.readyInMinutes - b.readyInMinutes);
         sortTimeButton.classList.add("active");
-    } else {
-        recepiesList.sort((a, b) => {
-            if (order === "asc") {
-                return a.veryPopular - b.veryPopular;
-            } else {
-                return b.veryPopular - a.veryPopular;
-            }
-        });
-        if (order === "asc") {
-            sortAscButton.classList.add("active");
-        } else {
-            sortDescButton.classList.add("active");
-        }
-    }
+    } if (order === "likes-asc") {
+        recepiesList.sort((a, b) => Number(a.aggregateLikes || 0) - Number(b.aggregateLikes || 0));
+        sortAscButton.classList.add("active");
+    } 
+    else if (order === "likes-desc") {
+        recepiesList.sort((a, b) => Number(b.aggregateLikes || 0) - Number(a.aggregateLikes || 0));
+        sortDescButton.classList.add("active");
+    } 
+   
+    
     renderRecepies();
     updatePlaceholder(); // Update placeholder after sorting
 };
 
-sortAscButton.addEventListener("click", () => sortReceipecs("asc"));
-sortDescButton.addEventListener("click", () => sortReceipecs("desc"));
+sortAscButton.addEventListener("click", () => sortReceipecs("likes-asc"));
+sortDescButton.addEventListener("click", () => sortReceipecs("likes-desc"));
 sortTimeButton.addEventListener("click", () => sortReceipecs("time"));
 
 const searchInput = document.getElementById("searchInput");

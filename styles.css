@@ -140,6 +140,18 @@ select:focus {
     /* Center the container */
 }
 
+
+.loading {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+    color: #ff4500;
+}
+
+.hidden {
+    display: none;
+}
 @media (min-width: 768px) {
     .recipe-container {
         grid-template-columns: repeat(2, 1fr);

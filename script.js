@@ -1,6 +1,7 @@
 const recipeCard = document.getElementById("container");
 const filterDropdown = document.getElementById("filterDropdown");
 const filterDropdownTime = document.getElementById("filterDropdownTime");
+const loadingElement = document.getElementById("loading");
 
 let recepiesList = []; // Store API data
 
@@ -9,7 +10,8 @@ const cachedKey = "cachedRecipes";
 const cacheExpirationTIme = 1000 * 60 * 60; // 1 hour
 // Fetch Data from Spoonacular API
 const fetchRecipes = async () => {
-
+    // Show loading indicator
+    loadingElement.classList.remove("hidden"); 
     const cachedData = localStorage.getItem(cachedKey);
     if (cachedData) {
         const { data, timestamp } = JSON.parse(cachedData);
@@ -19,15 +21,17 @@ const fetchRecipes = async () => {
             console.log("Using Cached Data:", data);
             recepiesList = data;
             renderRecepies();
+            loadingElement.classList.add("hidden");
             return;
         } else {
             console.log("Cache Expired. Fetching New Data...");
         }
     }
 
-    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=10&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
+    const URL = `https://api.spoonacular.com/recipes/complexSearch?number=50&cuisine=Asian,Italian,American&addRecipeInformation=true&apiKey=b7ce86ca197c48c491b8eadf53278878`;
 
     try {
+        loadingElement.classList.remove("hidden"); 
         const response = await fetch(URL);
         if (!response.ok) {
             console.error(`Error: ${response.status} - ${response.statusText}`);
@@ -49,6 +53,9 @@ const fetchRecipes = async () => {
         renderRecepies(); // Render after fetching
     } catch (error) {
         console.error("Error fetching recipes:", error);
+    } finally {
+        // Hide loading indicator after fetch completes
+        loadingElement.classList.add("hidden");
     }
 };
 
@@ -116,13 +123,13 @@ const sortReceipecs = (order) => {
     } if (order === "likes-asc") {
         recepiesList.sort((a, b) => Number(a.aggregateLikes || 0) - Number(b.aggregateLikes || 0));
         sortAscButton.classList.add("active");
-    } 
+    }
     else if (order === "likes-desc") {
         recepiesList.sort((a, b) => Number(b.aggregateLikes || 0) - Number(a.aggregateLikes || 0));
         sortDescButton.classList.add("active");
-    } 
-   
-    
+    }
+
+
     renderRecepies();
     updatePlaceholder(); // Update placeholder after sorting
 };
